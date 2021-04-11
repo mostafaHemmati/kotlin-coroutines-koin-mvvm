@@ -13,7 +13,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
-private const val USER_NAME = "userName"
+const val USER_NAME = "userName"
 
 class ProfileFragment : Fragment() {
     private var userName: String? = null
@@ -23,7 +23,6 @@ class ProfileFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             userName = it.getString(USER_NAME)
-
         }
     }
 
@@ -51,6 +50,7 @@ class ProfileFragment : Fragment() {
                 progressBar.visibility = if (it) VISIBLE else GONE
                 parent.visibility = if (it) GONE else VISIBLE
             })
+
             messageData.observe(viewLifecycleOwner, {
                 Toast.makeText(activity, it, Toast.LENGTH_LONG).show()
             })
@@ -59,14 +59,4 @@ class ProfileFragment : Fragment() {
 
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance(userName: String) =
-            ProfileFragment().apply {
-                arguments = Bundle().apply {
-                    putString(USER_NAME, userName)
-
-                }
-            }
-    }
 }

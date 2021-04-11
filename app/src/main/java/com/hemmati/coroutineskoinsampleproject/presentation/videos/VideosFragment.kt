@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hemmati.coroutineskoinsampleproject.R
-import com.hemmati.coroutineskoinsampleproject.presentation.profile.ProfileFragment
+import com.hemmati.coroutineskoinsampleproject.presentation.profile.USER_NAME
 import kotlinx.android.synthetic.main.fragment_videos.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -35,17 +37,8 @@ class VideosFragment : Fragment() {
     private fun onClicksAction() {
         mVideosAdapter?.onItemClick = {
 
-            val fragment = ProfileFragment.newInstance(it.username)
-            val transaction = activity?.supportFragmentManager?.beginTransaction()
-
-            transaction?.let {
-                transaction.apply {
-                    replace(R.id.screenContainer, fragment)
-                    disallowAddToBackStack()
-                    commit()
-                }
-
-            }
+            val arg = bundleOf(USER_NAME to it.username)
+            findNavController().navigate(R.id.profileFragment, arg)
 
         }
     }
