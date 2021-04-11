@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.hemmati.coroutineskoinsampleproject.R
+import com.hemmati.coroutineskoinsampleproject.utils.isNetworkAvailable
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.*
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -20,6 +21,7 @@ class ProfileFragment : Fragment() {
     private val profileViewModel: ProfileViewMode by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         arguments?.let {
             userName = it.getString(USER_NAME)
@@ -35,7 +37,14 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        userName?.let { profileViewModel.getProfile(it) }
+
+        if (context?.isNetworkAvailable() == true)
+            userName?.let { profileViewModel.getProfile(it) }
+        else
+            Toast.makeText(
+                activity, getString(R.string.network_conection_error),
+                Toast.LENGTH_LONG
+            ).show()
 
         with(profileViewModel) {
             profileData.observe(viewLifecycleOwner, {

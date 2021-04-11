@@ -11,13 +11,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hemmati.coroutineskoinsampleproject.R
 import com.hemmati.coroutineskoinsampleproject.presentation.profile.USER_NAME
+import com.hemmati.coroutineskoinsampleproject.utils.isNetworkAvailable
 import kotlinx.android.synthetic.main.fragment_videos.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
 class VideosFragment : Fragment() {
     private val videosViewModel: VideosViewModel by viewModel()
-    private var mVideosAdapter: VideosAdapter? = VideosAdapter()
+    private lateinit var mVideosAdapter: VideosAdapter
 
 
     override fun onCreateView(
@@ -35,7 +36,7 @@ class VideosFragment : Fragment() {
     }
 
     private fun onClicksAction() {
-        mVideosAdapter?.onItemClick = {
+        mVideosAdapter.onItemClick = {
 
             val arg = bundleOf(USER_NAME to it.username)
             findNavController().navigate(R.id.profileFragment, arg)
@@ -45,17 +46,25 @@ class VideosFragment : Fragment() {
 
     private fun initialRecyclerView() {
         videosRecyclerView.apply {
+            mVideosAdapter = VideosAdapter()
             layoutManager = LinearLayoutManager(activity)
             adapter = mVideosAdapter
         }
     }
 
     private fun viewModelStartAndObserved() {
-        videosViewModel.getVideos()
+
+        if (context?.isNetworkAvailable() == true)
+            videosViewModel.getVideos()
+        else
+            Toast.makeText(
+                activity, getString(R.string.network_conection_error),
+                Toast.LENGTH_LONG
+            ).show()
 
         with(videosViewModel) {
             videosData.observe(viewLifecycleOwner, {
-                mVideosAdapter?.videos = it.mostviewedvideos
+                mVideosAdapter.videos = it.mostviewedvideos
             })
             showProgressbar.observe(viewLifecycleOwner, {
                 progressBar.visibility =
