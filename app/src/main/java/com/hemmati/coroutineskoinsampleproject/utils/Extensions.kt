@@ -4,11 +4,13 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.view.View
+import androidx.fragment.app.Fragment
 
 @Suppress("DEPRECATION")
-fun Context.isNetworkAvailable(): Boolean {
+fun Fragment.isNetworkAvailable(): Boolean {
     val connectivityManager =
-        this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
         val networkInfo = connectivityManager.activeNetworkInfo
@@ -25,4 +27,12 @@ fun Context.isNetworkAvailable(): Boolean {
         }
     }
     return hasInternet
+}
+
+inline fun <T : View> T.showIf(condition: (T) -> Boolean) {
+    visibility = if (condition(this)) {
+        View.VISIBLE
+    } else {
+        View.GONE
+    }
 }

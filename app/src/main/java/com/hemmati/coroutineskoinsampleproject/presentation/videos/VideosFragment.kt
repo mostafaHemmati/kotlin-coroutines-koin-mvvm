@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hemmati.coroutineskoinsampleproject.R
 import com.hemmati.coroutineskoinsampleproject.presentation.profile.USER_NAME
 import com.hemmati.coroutineskoinsampleproject.utils.isNetworkAvailable
+import com.hemmati.coroutineskoinsampleproject.utils.showIf
 import kotlinx.android.synthetic.main.fragment_videos.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -54,7 +55,7 @@ class VideosFragment : Fragment() {
 
     private fun viewModelStartAndObserved() {
 
-        if (context?.isNetworkAvailable() == true)
+        if (isNetworkAvailable())
             videosViewModel.getVideos()
         else
             Toast.makeText(
@@ -66,9 +67,8 @@ class VideosFragment : Fragment() {
             videosData.observe(viewLifecycleOwner, {
                 mVideosAdapter.videos = it.mostviewedvideos
             })
-            showProgressbar.observe(viewLifecycleOwner, {
-                progressBar.visibility =
-                    if (it) View.VISIBLE else View.GONE
+            showProgressbar.observe(viewLifecycleOwner, { state ->
+                progressBar.showIf { state }
             })
             messageData.observe(viewLifecycleOwner, {
                 Toast.makeText(

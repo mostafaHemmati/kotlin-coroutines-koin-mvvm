@@ -8,8 +8,10 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.hemmati.coroutineskoinsampleproject.R
 import com.hemmati.coroutineskoinsampleproject.utils.isNetworkAvailable
+import com.hemmati.coroutineskoinsampleproject.utils.showIf
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.*
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -38,7 +40,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (context?.isNetworkAvailable() == true)
+        if (isNetworkAvailable())
             userName?.let { profileViewModel.getProfile(it) }
         else
             Toast.makeText(
@@ -55,9 +57,10 @@ class ProfileFragment : Fragment() {
             })
 
 
-            showProgressbar.observe(viewLifecycleOwner, {
-                progressBar.visibility = if (it) VISIBLE else GONE
-                parent.visibility = if (it) GONE else VISIBLE
+            showProgressbar.observe(viewLifecycleOwner, { isShow ->
+                progressBar.showIf { isShow }
+                parent.showIf { !isShow }
+
             })
 
             messageData.observe(viewLifecycleOwner, {
