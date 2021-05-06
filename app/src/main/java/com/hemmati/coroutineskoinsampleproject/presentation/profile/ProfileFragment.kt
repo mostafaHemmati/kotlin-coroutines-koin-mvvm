@@ -18,7 +18,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 const val USER_NAME = "userName"
 
-class ProfileFragment : Fragment() {
+class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private var userName: String? = null
     private val profileViewModel: ProfileViewMode by viewModel()
 
@@ -30,12 +30,6 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_profile, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

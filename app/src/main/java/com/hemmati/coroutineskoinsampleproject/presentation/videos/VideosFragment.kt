@@ -17,17 +17,10 @@ import kotlinx.android.synthetic.main.fragment_videos.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
-class VideosFragment : Fragment() {
+class VideosFragment : Fragment(R.layout.fragment_videos) {
     private val videosViewModel: VideosViewModel by viewModel()
     private lateinit var mVideosAdapter: VideosAdapter
 
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_videos, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
